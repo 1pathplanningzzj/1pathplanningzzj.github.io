@@ -12,6 +12,10 @@ theme = 'PaperMod'
   ShowCodeCopyButtons = true
   ShowToc = true
   TocOpen = false
+  disableScrollToTop = false
+  hidemeta = false
+  showtoc = true
+  tocopen = false
 
   [params.homeInfoParams]
     Title = "你好 👋"
@@ -19,11 +23,11 @@ theme = 'PaperMod'
 
   [[params.socialIcons]]
     name = "email"
-    url = "mailto:your-email@example.com"
+    url = "mailto:zijianzhang821@gmail.com"
 
   [[params.socialIcons]]
     name = "github"
-    url = "https://github.com/yourusername"
+    url = "https://github.com/1pathplanningzzj"
 
 [menu]
   [[menu.main]]
