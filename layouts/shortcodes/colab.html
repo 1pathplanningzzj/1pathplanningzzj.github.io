@@ -1,0 +1,61 @@
+{{- $notebook := .Get "notebook" -}}
+{{- $text := .Get "text" | default "在 Colab 中运行" -}}
+{{- $github := .Get "github" -}}
+
+{{- if $github -}}
+  {{- $url := printf "https://colab.research.google.com/github/%s" $github -}}
+  <a href="{{ $url }}" target="_blank" rel="noopener noreferrer" class="colab-button">
+    <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab">
+    <span>{{ $text }}</span>
+  </a>
+{{- else if $notebook -}}
+  <a href="https://colab.research.google.com/{{ $notebook }}" target="_blank" rel="noopener noreferrer" class="colab-button">
+    <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab">
+    <span>{{ $text }}</span>
+  </a>
+{{- else -}}
+  <div class="colab-button-placeholder">
+    <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab">
+    <span>{{ $text }}</span>
+  </div>
+{{- end -}}
+
+<style>
+.colab-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background: #f9ab00;
+  color: white;
+  text-decoration: none;
+  border-radius: 4px;
+  font-weight: 500;
+  transition: background 0.2s;
+  margin: 10px 0;
+}
+
+.colab-button:hover {
+  background: #e69500;
+}
+
+.colab-button img {
+  height: 20px;
+  margin: 0;
+}
+
+.colab-button span {
+  color: white;
+}
+
+.colab-button-placeholder {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background: #e0e0e0;
+  color: #666;
+  border-radius: 4px;
+  margin: 10px 0;
+}
+</style>
