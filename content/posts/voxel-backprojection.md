@@ -97,7 +97,7 @@ $$
 其中内参矩阵：
 
 $$
-\mathbf{K} = \left[\begin{array}{c}
+\mathbf{K} = \left[\begin{array}{ccc}
 f_x & 0 & c_x \\
 0 & f_y & c_y \\
 0 & 0 & 1
@@ -204,7 +204,7 @@ $$
 
 $$
 \left[\begin{array}{c} u_m \\ v_m \\ 1 \end{array}\right] \sim
-\left[\begin{array}{c}
+\left[\begin{array}{ccc}
 f_{x,m} & 0 & c_{x,m} \\
 0 & f_{y,m} & c_{y,m} \\
 0 & 0 & 1
