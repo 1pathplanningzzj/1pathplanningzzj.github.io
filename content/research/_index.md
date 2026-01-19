@@ -7,13 +7,10 @@ hidemeta: true
 
 ## 研究领域
 
-- 自动驾驶
-- 高清地图构建
-- 3D 目标检测
-- 2D 目标检测
-- 嵌入式机器人
-- 具身智能
-- VLA (Vision-Language-Action)
+- 自动驾驶 矢量高清地图
+- 2D 、3D 目标检测
+- 硬件与嵌入式 机器人
+- 具身智能 VLA (Vision-Language-Action)
 
 ## 当前项目
 

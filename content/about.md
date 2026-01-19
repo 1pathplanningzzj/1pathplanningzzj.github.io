@@ -14,9 +14,9 @@ ShowToc: false
 
 - **北京科技大学** - 机器人工程专业 (2022.9 - 2026.7)
   - GPA: 90.46/100，专业排名前列 
-  - 推免时拿到fdu TPAMI AE ustc IEEE Fellow等多个推免 offer
+  - 推免时拿到Fdu TPAMI AE USTC IEEE Fellow等多个推免 offer
   - 英语水平: CET-6 (474), CET-4 (519)
-  - 获得企业、国家奖学金、北京科技大学优秀学生等荣誉
+  - 获得国家、企业级奖学金、北京科技大学优秀学生等荣誉
 
 ## 研究经历
 
