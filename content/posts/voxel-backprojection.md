@@ -36,6 +36,7 @@ v_pts_local = torch.matmul(ext_inv_mat, self.voxel_pts.repeat(bs, 1, 1))
 - 每个体素代表一个候选的 3D 位置
 
 **数学表示**：
+
 $$
 \mathbf{P}_{\text{world}} = \{\mathbf{p}_1, \mathbf{p}_2, \ldots, \mathbf{p}_N\} \in \mathbb{R}^{3 \times N}
 $$
@@ -53,6 +54,7 @@ v_pts_local = torch.matmul(ext_inv_mat, self.voxel_pts.repeat(bs, 1, 1))
 **作用**：将世界坐标系下的体素点转换到当前相机的局部坐标系。
 
 **数学表示**：
+
 $$
 \mathbf{P}_{\text{camera}} = \mathbf{R}^T (\mathbf{P}_{\text{world}} - \mathbf{t})
 $$
@@ -63,10 +65,11 @@ $$
 - 外参矩阵：$\mathbf{T} = [\mathbf{R} \mid \mathbf{t}]$
 
 **齐次坐标形式**：
+
 $$
-\begin{bmatrix} \mathbf{P}_{\text{camera}} \\\\ 1 \end{bmatrix} =
-\begin{bmatrix} \mathbf{R}^T & -\mathbf{R}^T \mathbf{t} \\\\ \mathbf{0}^T & 1 \end{bmatrix}
-\begin{bmatrix} \mathbf{P}_{\text{world}} \\\\ 1 \end{bmatrix}
+\begin{bmatrix} \mathbf{P}_{\text{camera}} \\\\\\\\ 1 \end{bmatrix} =
+\begin{bmatrix} \mathbf{R}^T & -\mathbf{R}^T \mathbf{t} \\\\\\\\ \mathbf{0}^T & 1 \end{bmatrix}
+\begin{bmatrix} \mathbf{P}_{\text{world}} \\\\\\\\ 1 \end{bmatrix}
 $$
 
 **物理意义**：
@@ -85,21 +88,24 @@ pix_coords = calculate_sample_pixel_coords(v_pts_local, int_mat)
 **作用**：利用相机内参，将 3D 点投影到 2D 图像平面。
 
 **数学表示**：
+
 $$
-\begin{bmatrix} u \\\\ v \\\\ 1 \end{bmatrix} \sim
-\mathbf{K} \begin{bmatrix} X_c \\\\ Y_c \\\\ Z_c \end{bmatrix}
+\begin{bmatrix} u \\\\\\\\ v \\\\\\\\ 1 \end{bmatrix} \sim
+\mathbf{K} \begin{bmatrix} X_c \\\\\\\\ Y_c \\\\\\\\ Z_c \end{bmatrix}
 $$
 
 其中内参矩阵：
+
 $$
 \mathbf{K} = \begin{bmatrix}
-f_x & 0 & c_x \\
-0 & f_y & c_y \\
+f_x & 0 & c_x \\\\\\\\
+0 & f_y & c_y \\\\\\\\
 0 & 0 & 1
 \end{bmatrix}
 $$
 
 **展开形式**：
+
 $$
 u = \frac{f_x \cdot X_c}{Z_c} + c_x, \quad v = \frac{f_y \cdot Y_c}{Z_c} + c_y
 $$
@@ -134,6 +140,7 @@ sampled_feat = F.grid_sample(
 4. 填充：将特征 $\mathbf{f}$ 赋值给对应的 3D 体素
 
 **数学表示**：
+
 $$
 \mathbf{V}(\mathbf{p}_i) = \text{Sample}(\mathbf{F}_{\text{2D}}, \pi(\mathbf{K}, \mathbf{R}, \mathbf{t}, \mathbf{p}_i))
 $$
@@ -158,11 +165,13 @@ voxel_feat_list.append(sampled_feat)
 **融合策略**：
 
 1. **简单平均**：
+
 $$
 \mathbf{V}_{\text{fused}}(\mathbf{p}) = \frac{1}{M} \sum_{m=1}^{M} \mathbf{V}_m(\mathbf{p})
 $$
 
 2. **加权融合**（考虑可见性）：
+
 $$
 \mathbf{V}_{\text{fused}}(\mathbf{p}) = \frac{\sum_{m=1}^{M} w_m(\mathbf{p}) \cdot \mathbf{V}_m(\mathbf{p})}{\sum_{m=1}^{M} w_m(\mathbf{p})}
 $$
@@ -186,22 +195,24 @@ $$
 $$
 
 其中投影函数：
+
 $$
 \pi_m(\mathbf{p}_i) = \mathbf{K}_m \cdot \mathbf{R}_m^T (\mathbf{p}_i - \mathbf{t}_m)
 $$
 
 展开为：
+
 $$
-\begin{bmatrix} u_m \\\\ v_m \\\\ 1 \end{bmatrix} \sim
+\begin{bmatrix} u_m \\\\\\\\ v_m \\\\\\\\ 1 \end{bmatrix} \sim
 \begin{bmatrix}
-f_{x,m} & 0 & c_{x,m} \\
-0 & f_{y,m} & c_{y,m} \\
+f_{x,m} & 0 & c_{x,m} \\\\\\\\
+0 & f_{y,m} & c_{y,m} \\\\\\\\
 0 & 0 & 1
 \end{bmatrix}
 \begin{bmatrix}
 \mathbf{R}_m^T & -\mathbf{R}_m^T \mathbf{t}_m
 \end{bmatrix}
-\begin{bmatrix} \mathbf{p}_i \\\\ 1 \end{bmatrix}
+\begin{bmatrix} \mathbf{p}_i \\\\\\\\ 1 \end{bmatrix}
 $$
 
 ## 为什么这种方法高效？
@@ -233,6 +244,7 @@ $$
 ### 3. 可微分的端到端训练
 
 整个流程完全可微：
+
 $$
 \frac{\partial \mathcal{L}}{\partial \mathbf{F}_{\text{2D}}} = \frac{\partial \mathcal{L}}{\partial \mathbf{V}_{\text{fused}}} \cdot \frac{\partial \mathbf{V}_{\text{fused}}}{\partial \mathbf{F}_{\text{2D}}}
 $$
