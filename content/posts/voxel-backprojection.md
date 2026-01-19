@@ -56,7 +56,7 @@ v_pts_local = torch.matmul(ext_inv_mat, self.voxel_pts.repeat(bs, 1, 1))
 **数学表示**：
 
 $$
-\mathbf{P}_{\text{camera}} = \mathbf{R}^T (\mathbf{P}_{\text{world}} - \mathbf{t})
+\mathbf{P}_\text{camera} = \mathbf{R}^T (\mathbf{P}_\text{world} - \mathbf{t})
 $$
 
 其中：
@@ -67,9 +67,9 @@ $$
 **齐次坐标形式**：
 
 $$
-\left[\begin{array}{c} \mathbf{P}_{\text{camera}} \\\\ 1 \end{array}\right] =
+\left[\begin{array}{c} \mathbf{P}_\text{camera} \\\\ 1 \end{array}\right] =
 \left[\begin{array}{cc} \mathbf{R}^T & -\mathbf{R}^T \mathbf{t} \\\\ \mathbf{0}^T & 1 \end{array}\right]
-\left[\begin{array}{c} \mathbf{P}_{\text{world}} \\\\ 1 \end{array}\right]
+\left[\begin{array}{c} \mathbf{P}_\text{world} \\\\ 1 \end{array}\right]
 $$
 
 **物理意义**：
