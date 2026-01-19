@@ -60,7 +60,7 @@ att_2d_masks = cumsum[:, None, :] <= cumsum[:, :, None]
 
 这行代码的含义是：**token $i$ 可以注意到 token $j$，当且仅当 $\text{cumsum}[j] \leq \text{cumsum}[i]$**
 
-其中 $\text{cumsum}[i] = \sum_{k=0}^{i} \text{att\_masks}[k]$ 是前缀和。
+其中 $\mathrm{cumsum}[i] = \sum_{k=0}^{i} \mathrm{att\_masks}[k]$ 是前缀和。
 
 ### 2. 为什么这样设计？
 

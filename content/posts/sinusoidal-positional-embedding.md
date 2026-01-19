@@ -52,7 +52,7 @@ $$
 其中周期 $\text{period}_i$ 从 `min_period` 到 `max_period` 呈指数增长：
 
 $$
-\text{period}_i = \text{min\_period} \cdot \left(\frac{\text{max\_period}}{\text{min\_period}}\right)^{i/(d/2)}
+\mathrm{period}_i = \mathrm{min\_period} \cdot \left(\frac{\mathrm{max\_period}}{\mathrm{min\_period}}\right)^{i/(d/2)}
 $$
 
 ## 高维空间中的方向差异
