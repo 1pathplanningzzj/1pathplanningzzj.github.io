@@ -8,7 +8,7 @@ categories: ["知识库"]
 
 在深度学习领域，JAX 和 PyTorch 是两个备受关注的框架。PyTorch 以其易用性和动态计算图著称，而 JAX 则以函数式编程和高性能计算见长。本文将深入对比两者的特点、优势和适用场景，帮助你做出明智的选择。
 
-{{< colab github="1pathplanningzzj/1pathplanningzzj.github.io/blob/main/static/notebooks/jax-vs-pytorch-examples.ipynb" text="🚀 在 Colab 中运行完整代码示例" >}}
+{{< notebook-buttons github="1pathplanningzzj/1pathplanningzzj.github.io/blob/main/static/notebooks/jax-vs-pytorch-examples.ipynb" >}}
 
 ## 核心设计哲学
 

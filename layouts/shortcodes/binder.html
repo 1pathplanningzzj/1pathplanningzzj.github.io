@@ -1,0 +1,70 @@
+{{- $notebook := .Get "notebook" -}}
+{{- $text := .Get "text" | default "在 Binder 中运行" -}}
+{{- $github := .Get "github" -}}
+{{- $repo := .Get "repo" -}}
+{{- $branch := .Get "branch" | default "main" -}}
+{{- $filepath := .Get "filepath" -}}
+
+{{- if $github -}}
+  {{- $parts := split $github "/" -}}
+  {{- $user := index $parts 0 -}}
+  {{- $repoName := index $parts 1 -}}
+  {{- $branchName := index $parts 3 -}}
+  {{- $path := strings.TrimPrefix (printf "%s/%s/%s/" $user $repoName (printf "blob/%s" $branchName)) $github -}}
+  {{- $url := printf "https://mybinder.org/v2/gh/%s/%s/%s?filepath=%s" $user $repoName $branchName $path -}}
+  <a href="{{ $url }}" target="_blank" rel="noopener noreferrer" class="binder-button">
+    <img src="https://mybinder.org/badge_logo.svg" alt="Launch Binder">
+    <span>{{ $text }}</span>
+  </a>
+{{- else if and $repo $filepath -}}
+  {{- $url := printf "https://mybinder.org/v2/gh/%s/%s?filepath=%s" $repo $branch $filepath -}}
+  <a href="{{ $url }}" target="_blank" rel="noopener noreferrer" class="binder-button">
+    <img src="https://mybinder.org/badge_logo.svg" alt="Launch Binder">
+    <span>{{ $text }}</span>
+  </a>
+{{- else -}}
+  <div class="binder-button-placeholder">
+    <img src="https://mybinder.org/badge_logo.svg" alt="Launch Binder">
+    <span>{{ $text }}</span>
+  </div>
+{{- end -}}
+
+<style>
+.binder-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background: #579aca;
+  color: white;
+  text-decoration: none;
+  border-radius: 4px;
+  font-weight: 500;
+  transition: background 0.2s;
+  margin: 10px 0;
+}
+
+.binder-button:hover {
+  background: #3d7ba8;
+}
+
+.binder-button img {
+  height: 20px;
+  margin: 0;
+}
+
+.binder-button span {
+  color: white;
+}
+
+.binder-button-placeholder {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background: #e0e0e0;
+  color: #666;
+  border-radius: 4px;
+  margin: 10px 0;
+}
+</style>

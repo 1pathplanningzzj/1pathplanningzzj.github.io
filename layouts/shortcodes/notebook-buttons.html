@@ -1,0 +1,113 @@
+{{- $github := .Get "github" -}}
+{{- $colabText := .Get "colabText" | default "Google Colab" -}}
+{{- $binderText := .Get "binderText" | default "Binder (无需登录)" -}}
+
+{{- if $github -}}
+  {{- $parts := split $github "/" -}}
+  {{- $user := index $parts 0 -}}
+  {{- $repoName := index $parts 1 -}}
+  {{- $branchName := index $parts 3 -}}
+  {{- $path := strings.TrimPrefix (printf "%s/%s/%s/" $user $repoName (printf "blob/%s" $branchName)) $github -}}
+
+  <div class="notebook-buttons">
+    <div class="notebook-buttons-title">🚀 运行此代码：</div>
+    <div class="notebook-buttons-container">
+      <a href="https://colab.research.google.com/github/{{ $github }}" target="_blank" rel="noopener noreferrer" class="notebook-btn colab-btn">
+        <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab">
+        <span>{{ $colabText }}</span>
+      </a>
+      <a href="https://mybinder.org/v2/gh/{{ $user }}/{{ $repoName }}/{{ $branchName }}?filepath={{ $path }}" target="_blank" rel="noopener noreferrer" class="notebook-btn binder-btn">
+        <img src="https://mybinder.org/badge_logo.svg" alt="Launch Binder">
+        <span>{{ $binderText }}</span>
+      </a>
+    </div>
+    <div class="notebook-buttons-note">
+      💡 提示：Colab 需要 Google 账号但启动快，Binder 无需登录但首次启动较慢
+    </div>
+  </div>
+{{- end -}}
+
+<style>
+.notebook-buttons {
+  background: #f8f9fa;
+  border: 2px solid #e9ecef;
+  border-radius: 8px;
+  padding: 16px;
+  margin: 20px 0;
+}
+
+.notebook-buttons-title {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 12px;
+  color: #333;
+}
+
+.notebook-buttons-container {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+
+.notebook-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  color: white;
+  text-decoration: none;
+  border-radius: 6px;
+  font-weight: 500;
+  transition: all 0.2s;
+  flex: 1;
+  min-width: 200px;
+  justify-content: center;
+}
+
+.colab-btn {
+  background: #f9ab00;
+}
+
+.colab-btn:hover {
+  background: #e69500;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(249, 171, 0, 0.3);
+}
+
+.binder-btn {
+  background: #579aca;
+}
+
+.binder-btn:hover {
+  background: #3d7ba8;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(87, 154, 202, 0.3);
+}
+
+.notebook-btn img {
+  height: 20px;
+  margin: 0;
+}
+
+.notebook-btn span {
+  color: white;
+}
+
+.notebook-buttons-note {
+  font-size: 13px;
+  color: #666;
+  font-style: italic;
+  line-height: 1.5;
+}
+
+@media (max-width: 600px) {
+  .notebook-buttons-container {
+    flex-direction: column;
+  }
+
+  .notebook-btn {
+    width: 100%;
+  }
+}
+</style>
