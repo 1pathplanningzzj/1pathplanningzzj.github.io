@@ -38,7 +38,7 @@ v_pts_local = torch.matmul(ext_inv_mat, self.voxel_pts.repeat(bs, 1, 1))
 **数学表示**：
 
 $$
-\mathbf{P}_{\text{world}} = \{\mathbf{p}_1, \mathbf{p}_2, \ldots, \mathbf{p}_N\} \in \mathbb{R}^{3 \times N}
+\mathbf{P}_\text{world} = \{\mathbf{p}_1, \mathbf{p}_2, \ldots, \mathbf{p}_N\} \in \mathbb{R}^{3 \times N}
 $$
 
 其中 $N$ 是体素总数（如 $64 \times 64 \times 32 = 131072$）。
@@ -134,7 +134,7 @@ sampled_feat = F.grid_sample(
 **作用**：根据计算出的像素坐标，从 2D 特征图中采样特征，填充到 3D 体素中。
 
 **过程**：
-1. 输入：2D 特征图 $\mathbf{F}_{\text{2D}} \in \mathbb{R}^{C \times H \times W}$
+1. 输入：2D 特征图 $\mathbf{F}_\text{2D} \in \mathbb{R}^{C \times H \times W}$
 2. 查询：像素坐标 $(u, v)$
 3. 采样：双线性插值获取特征向量 $\mathbf{f} \in \mathbb{R}^C$
 4. 填充：将特征 $\mathbf{f}$ 赋值给对应的 3D 体素
@@ -142,7 +142,7 @@ sampled_feat = F.grid_sample(
 **数学表示**：
 
 $$
-\mathbf{V}(\mathbf{p}_i) = \text{Sample}(\mathbf{F}_{\text{2D}}, \pi(\mathbf{K}, \mathbf{R}, \mathbf{t}, \mathbf{p}_i))
+\mathbf{V}(\mathbf{p}_i) = \text{Sample}(\mathbf{F}_\text{2D}, \pi(\mathbf{K}, \mathbf{R}, \mathbf{t}, \mathbf{p}_i))
 $$
 
 其中：
@@ -167,13 +167,13 @@ voxel_feat_list.append(sampled_feat)
 1. **简单平均**：
 
 $$
-\mathbf{V}_{\text{fused}}(\mathbf{p}) = \frac{1}{M} \sum_{m=1}^{M} \mathbf{V}_m(\mathbf{p})
+\mathbf{V}_\text{fused}(\mathbf{p}) = \frac{1}{M} \sum_{m=1}^{M} \mathbf{V}_m(\mathbf{p})
 $$
 
 2. **加权融合**（考虑可见性）：
 
 $$
-\mathbf{V}_{\text{fused}}(\mathbf{p}) = \frac{\sum_{m=1}^{M} w_m(\mathbf{p}) \cdot \mathbf{V}_m(\mathbf{p})}{\sum_{m=1}^{M} w_m(\mathbf{p})}
+\mathbf{V}_\text{fused}(\mathbf{p}) = \frac{\sum_{m=1}^{M} w_m(\mathbf{p}) \cdot \mathbf{V}_m(\mathbf{p})}{\sum_{m=1}^{M} w_m(\mathbf{p})}
 $$
 
 其中权重 $w_m(\mathbf{p})$ 可以基于：
@@ -191,7 +191,7 @@ $$
 对于体素点 $\mathbf{p}_i \in \mathbb{R}^3$，从世界坐标系到最终的 3D 特征：
 
 $$
-\mathbf{V}_{\text{fused}}(\mathbf{p}_i) = \text{Fuse}\left(\left\{\text{Sample}\left(\mathbf{F}_m, \pi_m(\mathbf{p}_i)\right)\right\}_{m=1}^{M}\right)
+\mathbf{V}_\text{fused}(\mathbf{p}_i) = \text{Fuse}\left(\left\{\text{Sample}\left(\mathbf{F}_m, \pi_m(\mathbf{p}_i)\right)\right\}_{m=1}^{M}\right)
 $$
 
 其中投影函数：
@@ -246,7 +246,7 @@ $$
 整个流程完全可微：
 
 $$
-\frac{\partial \mathcal{L}}{\partial \mathbf{F}_{\text{2D}}} = \frac{\partial \mathcal{L}}{\partial \mathbf{V}_{\text{fused}}} \cdot \frac{\partial \mathbf{V}_{\text{fused}}}{\partial \mathbf{F}_{\text{2D}}}
+\frac{\partial \mathcal{L}}{\partial \mathbf{F}_\text{2D}} = \frac{\partial \mathcal{L}}{\partial \mathbf{V}_\text{fused}} \cdot \frac{\partial \mathbf{V}_\text{fused}}{\partial \mathbf{F}_\text{2D}}
 $$
 
 梯度可以从 3D 损失反向传播到 2D 特征提取器。
