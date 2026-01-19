@@ -16,6 +16,7 @@ theme = 'PaperMod'
   hidemeta = false
   showtoc = true
   tocopen = false
+  math = true
 
   [params.homeInfoParams]
     Title = "你好 👋"
