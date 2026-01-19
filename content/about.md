@@ -58,4 +58,4 @@ ShowToc: false
 ## 联系方式
 
 - 邮箱: zijianzhang821@gmail.com
-- GitHub: [1pathplanningzzj](https://github.com/1pathplanningzzj)
+- GitHub: [Zijian-Zhang](https://github.com/Zijian-Zhang)
