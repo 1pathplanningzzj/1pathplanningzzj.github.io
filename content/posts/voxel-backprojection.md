@@ -67,9 +67,9 @@ $$
 **齐次坐标形式**：
 
 $$
-\begin{bmatrix} \mathbf{P}_{\text{camera}} \\\\\\\\ 1 \end{bmatrix} =
-\begin{bmatrix} \mathbf{R}^T & -\mathbf{R}^T \mathbf{t} \\\\\\\\ \mathbf{0}^T & 1 \end{bmatrix}
-\begin{bmatrix} \mathbf{P}_{\text{world}} \\\\\\\\ 1 \end{bmatrix}
+\left[\begin{array}{c} \mathbf{P}_{\text{camera}} \\ 1 \end{array}\right] =
+\left[\begin{array}{cc} \mathbf{R}^T & -\mathbf{R}^T \mathbf{t} \\ \mathbf{0}^T & 1 \end{array}\right]
+\left[\begin{array}{c} \mathbf{P}_{\text{world}} \\ 1 \end{array}\right]
 $$
 
 **物理意义**：
@@ -90,18 +90,18 @@ pix_coords = calculate_sample_pixel_coords(v_pts_local, int_mat)
 **数学表示**：
 
 $$
-\begin{bmatrix} u \\\\\\\\ v \\\\\\\\ 1 \end{bmatrix} \sim
-\mathbf{K} \begin{bmatrix} X_c \\\\\\\\ Y_c \\\\\\\\ Z_c \end{bmatrix}
+\left[\begin{array}{c} u \\ v \\ 1 \end{array}\right] \sim
+\mathbf{K} \left[\begin{array}{c} X_c \\ Y_c \\ Z_c \end{array}\right]
 $$
 
 其中内参矩阵：
 
 $$
-\mathbf{K} = \begin{bmatrix}
-f_x & 0 & c_x \\\\\\\\
-0 & f_y & c_y \\\\\\\\
+\mathbf{K} = \left[\begin{array}{c}
+f_x & 0 & c_x \\
+0 & f_y & c_y \\
 0 & 0 & 1
-\end{bmatrix}
+\end{array}\right]
 $$
 
 **展开形式**：
@@ -203,16 +203,16 @@ $$
 展开为：
 
 $$
-\begin{bmatrix} u_m \\\\\\\\ v_m \\\\\\\\ 1 \end{bmatrix} \sim
-\begin{bmatrix}
-f_{x,m} & 0 & c_{x,m} \\\\\\\\
-0 & f_{y,m} & c_{y,m} \\\\\\\\
+\left[\begin{array}{c} u_m \\ v_m \\ 1 \end{array}\right] \sim
+\left[\begin{array}{c}
+f_{x,m} & 0 & c_{x,m} \\
+0 & f_{y,m} & c_{y,m} \\
 0 & 0 & 1
-\end{bmatrix}
-\begin{bmatrix}
+\end{array}\right]
+\left[\begin{array}{c}
 \mathbf{R}_m^T & -\mathbf{R}_m^T \mathbf{t}_m
-\end{bmatrix}
-\begin{bmatrix} \mathbf{p}_i \\\\\\\\ 1 \end{bmatrix}
+\end{array}\right]
+\left[\begin{array}{c} \mathbf{p}_i \\ 1 \end{array}\right]
 $$
 
 ## 为什么这种方法高效？
