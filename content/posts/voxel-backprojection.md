@@ -60,7 +60,7 @@ $$
 其中：
 - $\mathbf{R} \in \mathbb{R}^{3 \times 3}$：相机旋转矩阵
 - $\mathbf{t} \in \mathbb{R}^3$：相机平移向量
-- 外参矩阵：$\mathbf{T} = [\mathbf{R} | \mathbf{t}]$
+- 外参矩阵：$\mathbf{T} = [\mathbf{R} \mid \mathbf{t}]$
 
 **齐次坐标形式**：
 $$
