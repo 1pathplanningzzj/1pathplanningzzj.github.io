@@ -191,7 +191,7 @@ $$
 对于体素点 $\mathbf{p}_i \in \mathbb{R}^3$，从世界坐标系到最终的 3D 特征：
 
 $$
-\mathbf{V}_\text{fused}(\mathbf{p}_i) = \text{Fuse}\left(\left\{\text{Sample}\left(\mathbf{F}_m, \pi_m(\mathbf{p}_i)\right)\right\}_{m=1}^{M}\right)
+\mathbf{V}_\text{fused}(\mathbf{p}_i) = \text{Fuse}\big(\{\text{Sample}(\mathbf{F}_m, \pi_m(\mathbf{p}_i))\}_{m=1}^{M}\big)
 $$
 
 其中投影函数：
