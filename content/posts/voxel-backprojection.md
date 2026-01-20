@@ -123,7 +123,7 @@ sampled_feat = F.grid_sample(
 **数学表示**：
 
 $$
-V(\mathbf{p}_i) = \mathrm{Sample}(F_{2D}, \pi(\mathbf{K}, \mathbf{R}, \mathbf{t}, \mathbf{p}_i))
+V(\mathbf{p}_i) = \text{Sample}(F_{2D}, \pi(\mathbf{K}, \mathbf{R}, \mathbf{t}, \mathbf{p}_i))
 $$
 
 其中：
@@ -172,7 +172,7 @@ $$
 对于体素点 $\mathbf{p}_i \in \mathbb{R}^3$，从世界坐标系到最终的 3D 特征：
 
 $$
-\mathbf{V}_{\mathrm{fused}}(\mathbf{p}_i) = \mathrm{Fuse}(\mathrm{Sample}(\mathbf{F}_m, \pi_m(\mathbf{p}_i)))_{m=1}^{M}
+V_{fused}(\mathbf{p}_i) = \text{Fuse}(\text{Sample}(\mathbf{F}_m, \pi_m(\mathbf{p}_i)))_{m=1}^{M}
 $$
 
 其中投影函数：
