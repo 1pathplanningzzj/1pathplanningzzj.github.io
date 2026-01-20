@@ -38,7 +38,7 @@ v_pts_local = torch.matmul(ext_inv_mat, self.voxel_pts.repeat(bs, 1, 1))
 **数学表示**：
 
 $$
-\mathbf{P}_\text{world} = \{\mathbf{p}_1, \mathbf{p}_2, \ldots, \mathbf{p}_N\} \in \mathbb{R}^{3 \times N}
+\mathbf{P}_{\mathrm{world}} = (\mathbf{p}_1, \mathbf{p}_2, \ldots, \mathbf{p}_N) \in \mathbb{R}^{3 \times N}
 $$
 
 其中 $N$ 是体素总数（如 $64 \times 64 \times 32 = 131072$）。
@@ -56,7 +56,7 @@ v_pts_local = torch.matmul(ext_inv_mat, self.voxel_pts.repeat(bs, 1, 1))
 **数学表示**：
 
 $$
-\mathbf{P}_\text{camera} = \mathbf{R}^T (\mathbf{P}_\text{world} - \mathbf{t})
+\mathbf{P}_{mathrm{camera}} = \mathbf{R}^T (\mathbf{P}_{mathrm{world}} - \mathbf{t})
 $$
 
 其中：
@@ -64,13 +64,7 @@ $$
 - $\mathbf{t} \in \mathbb{R}^3$：相机平移向量
 - 外参矩阵：$\mathbf{T} = [\mathbf{R} \mid \mathbf{t}]$
 
-**齐次坐标形式**：
-
-$$
-\left[\begin{array}{c} \mathbf{P}_\text{camera} \\\\ 1 \end{array}\right] =
-\left[\begin{array}{cc} \mathbf{R}^T & -\mathbf{R}^T \mathbf{t} \\\\ \mathbf{0}^T & 1 \end{array}\right]
-\left[\begin{array}{c} \mathbf{P}_\text{world} \\\\ 1 \end{array}\right]
-$$
+**齐次坐标形式**：使用 4x4 变换矩阵表示，将 3D 点扩展为齐次坐标后进行变换。
 
 **物理意义**：
 - 对于 Agent 相机：体素点从世界坐标系转到 Agent 视角
@@ -87,22 +81,9 @@ pix_coords = calculate_sample_pixel_coords(v_pts_local, int_mat)
 
 **作用**：利用相机内参，将 3D 点投影到 2D 图像平面。
 
-**数学表示**：
+**数学表示**：相机内参矩阵 K 将 3D 点 (X_c, Y_c, Z_c) 投影到 2D 像素坐标 (u, v)。
 
-$$
-\left[\begin{array}{c} u \\\\ v \\\\ 1 \end{array}\right] \sim
-\mathbf{K} \left[\begin{array}{c} X_c \\\\ Y_c \\\\ Z_c \end{array}\right]
-$$
-
-其中内参矩阵：
-
-$$
-\mathbf{K} = \left[\begin{array}{ccc}
-f_x & 0 & c_x \\\\
-0 & f_y & c_y \\\\
-0 & 0 & 1
-\end{array}\right]
-$$
+**内参矩阵 K**：包含焦距 (f_x, f_y) 和主点坐标 (c_x, c_y)。
 
 **展开形式**：
 
@@ -134,7 +115,7 @@ sampled_feat = F.grid_sample(
 **作用**：根据计算出的像素坐标，从 2D 特征图中采样特征，填充到 3D 体素中。
 
 **过程**：
-1. 输入：2D 特征图 $\mathbf{F}_\text{2D} \in \mathbb{R}^{C \times H \times W}$
+1. 输入：2D 特征图 $\mathbf{F}_{mathrm{2D}} \in \mathbb{R}^{C \times H \times W}$
 2. 查询：像素坐标 $(u, v)$
 3. 采样：双线性插值获取特征向量 $\mathbf{f} \in \mathbb{R}^C$
 4. 填充：将特征 $\mathbf{f}$ 赋值给对应的 3D 体素
@@ -142,13 +123,13 @@ sampled_feat = F.grid_sample(
 **数学表示**：
 
 $$
-\mathbf{V}(\mathbf{p}_i) = \text{Sample}(\mathbf{F}_\text{2D}, \pi(\mathbf{K}, \mathbf{R}, \mathbf{t}, \mathbf{p}_i))
+V(\mathbf{p}_i) = \mathrm{Sample}(F_{2D}, \pi(\mathbf{K}, \mathbf{R}, \mathbf{t}, \mathbf{p}_i))
 $$
 
 其中：
-- $\mathbf{V}(\mathbf{p}_i)$：体素 $i$ 的特征
-- $\pi(\cdot)$：投影函数（步骤 2 + 步骤 3）
-- $\text{Sample}(\cdot)$：双线性插值采样
+- V(p_i)：体素 i 的特征
+- π(·)：投影函数（步骤 2 + 步骤 3）
+- Sample(·)：双线性插值采样
 
 **结果**：原本"扁平"的 2D 特征图被"立体化"，填充到 3D 空间中。
 
@@ -167,13 +148,13 @@ voxel_feat_list.append(sampled_feat)
 1. **简单平均**：
 
 $$
-\mathbf{V}_\text{fused}(\mathbf{p}) = \frac{1}{M} \sum_{m=1}^{M} \mathbf{V}_m(\mathbf{p})
+\mathbf{V}_{mathrm{fused}}(\mathbf{p}) = \frac{1}{M} \sum_{m=1}^{M} \mathbf{V}_m(\mathbf{p})
 $$
 
 2. **加权融合**（考虑可见性）：
 
 $$
-\mathbf{V}_\text{fused}(\mathbf{p}) = \frac{\sum_{m=1}^{M} w_m(\mathbf{p}) \cdot \mathbf{V}_m(\mathbf{p})}{\sum_{m=1}^{M} w_m(\mathbf{p})}
+\mathbf{V}_{mathrm{fused}}(\mathbf{p}) = \frac{\sum_{m=1}^{M} w_m(\mathbf{p}) \cdot \mathbf{V}_m(\mathbf{p})}{\sum_{m=1}^{M} w_m(\mathbf{p})}
 $$
 
 其中权重 $w_m(\mathbf{p})$ 可以基于：
@@ -200,20 +181,7 @@ $$
 \pi_m(\mathbf{p}_i) = \mathbf{K}_m \cdot \mathbf{R}_m^T (\mathbf{p}_i - \mathbf{t}_m)
 $$
 
-展开为：
-
-$$
-\left[\begin{array}{c} u_m \\\\ v_m \\\\ 1 \end{array}\right] \sim
-\left[\begin{array}{ccc}
-f_{x,m} & 0 & c_{x,m} \\\\
-0 & f_{y,m} & c_{y,m} \\\\
-0 & 0 & 1
-\end{array}\right]
-\left[\begin{array}{c}
-\mathbf{R}_m^T & -\mathbf{R}_m^T \mathbf{t}_m
-\end{array}\right]
-\left[\begin{array}{c} \mathbf{p}_i \\\\ 1 \end{array}\right]
-$$
+这个公式将世界坐标系下的 3D 点先通过外参变换到相机坐标系，再通过内参投影到 2D 像素坐标。
 
 ## 为什么这种方法高效？
 
@@ -246,7 +214,7 @@ $$
 整个流程完全可微：
 
 $$
-\frac{\partial \mathcal{L}}{\partial \mathbf{F}_\text{2D}} = \frac{\partial \mathcal{L}}{\partial \mathbf{V}_\text{fused}} \cdot \frac{\partial \mathbf{V}_\text{fused}}{\partial \mathbf{F}_\text{2D}}
+\frac{\partial \mathcal{L}}{\partial \mathbf{F}_{mathrm{2D}}} = \frac{\partial \mathcal{L}}{\partial \mathbf{V}_{mathrm{fused}}} \cdot \frac{\partial \mathbf{V}_{mathrm{fused}}}{\partial \mathbf{F}_{mathrm{2D}}}
 $$
 
 梯度可以从 3D 损失反向传播到 2D 特征提取器。
