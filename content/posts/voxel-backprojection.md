@@ -56,7 +56,7 @@ v_pts_local = torch.matmul(ext_inv_mat, self.voxel_pts.repeat(bs, 1, 1))
 **数学表示**：
 
 $$
-\mathbf{P}_{mathrm{camera}} = \mathbf{R}^T (\mathbf{P}_{mathrm{world}} - \mathbf{t})
+P_{cam} = \mathbf{R}^T (P_{world} - \mathbf{t})
 $$
 
 其中：
@@ -115,7 +115,7 @@ sampled_feat = F.grid_sample(
 **作用**：根据计算出的像素坐标，从 2D 特征图中采样特征，填充到 3D 体素中。
 
 **过程**：
-1. 输入：2D 特征图 $\mathbf{F}_{mathrm{2D}} \in \mathbb{R}^{C \times H \times W}$
+1. 输入：2D 特征图 $F_{2D} \in \mathbb{R}^{C \times H \times W}$
 2. 查询：像素坐标 $(u, v)$
 3. 采样：双线性插值获取特征向量 $\mathbf{f} \in \mathbb{R}^C$
 4. 填充：将特征 $\mathbf{f}$ 赋值给对应的 3D 体素
@@ -148,13 +148,13 @@ voxel_feat_list.append(sampled_feat)
 1. **简单平均**：
 
 $$
-\mathbf{V}_{mathrm{fused}}(\mathbf{p}) = \frac{1}{M} \sum_{m=1}^{M} \mathbf{V}_m(\mathbf{p})
+V_{fused}(\mathbf{p}) = \frac{1}{M} \sum_{m=1}^{M} \mathbf{V}_m(\mathbf{p})
 $$
 
 2. **加权融合**（考虑可见性）：
 
 $$
-\mathbf{V}_{mathrm{fused}}(\mathbf{p}) = \frac{\sum_{m=1}^{M} w_m(\mathbf{p}) \cdot \mathbf{V}_m(\mathbf{p})}{\sum_{m=1}^{M} w_m(\mathbf{p})}
+V_{fused}(\mathbf{p}) = \frac{\sum_{m=1}^{M} w_m(\mathbf{p}) \cdot \mathbf{V}_m(\mathbf{p})}{\sum_{m=1}^{M} w_m(\mathbf{p})}
 $$
 
 其中权重 $w_m(\mathbf{p})$ 可以基于：
@@ -214,7 +214,7 @@ $$
 整个流程完全可微：
 
 $$
-\frac{\partial \mathcal{L}}{\partial \mathbf{F}_{mathrm{2D}}} = \frac{\partial \mathcal{L}}{\partial \mathbf{V}_{mathrm{fused}}} \cdot \frac{\partial \mathbf{V}_{mathrm{fused}}}{\partial \mathbf{F}_{mathrm{2D}}}
+\frac{\partial \mathcal{L}}{\partial F_{2D}} = \frac{\partial \mathcal{L}}{\partial V_{fused}} \cdot \frac{\partial V_{fused}}{\partial F_{2D}}
 $$
 
 梯度可以从 3D 损失反向传播到 2D 特征提取器。
